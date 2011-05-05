@@ -1,11 +1,11 @@
 goog.require('goog.testing.jsunit');
-goog.require('blog.models.Blog');
+goog.require('blog.models.Post');
 goog.require('blog.models.Comment');
 
 
 function test_can_set_body(){
 
-  var b = new blog.models.Blog();
+  var b = new blog.models.Post();
 
   b.setBody("test");
 
@@ -13,7 +13,7 @@ function test_can_set_body(){
 }
 
 function test_can_set_title(){
-  var b = new blog.models.Blog();
+  var b = new blog.models.Post();
 
   b.setHeader('test');
 
@@ -21,7 +21,7 @@ function test_can_set_title(){
 }
 
 function test_can_add_comment(){
-  var b = new blog.models.Blog();
+  var b = new blog.models.Post();
   var c = new blog.models.Comment("asdf");
 
   b.addComment(c);
