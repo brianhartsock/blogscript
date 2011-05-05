@@ -1,7 +1,10 @@
 goog.require('goog.testing.jsunit');
+goog.require('blog.models.Blog');
+goog.require('blog.models.Comment');
 
 
 function test_can_set_body(){
+
   var b = new blog.models.Blog();
 
   b.setBody("test");

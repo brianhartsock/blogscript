@@ -3,7 +3,6 @@ goog.addDependency("../../../../models/blog.js", ['blog.models.Blog'], ['blog.mo
 goog.addDependency("../../../../models/comment.js", ['blog.models.Comment'], []);
 goog.addDependency("../../alltests.js", [], []);
 goog.addDependency("base.js", [], []);
-goog.addDependency("deps.js", [], []);
 goog.addDependency("array/array.js", ['goog.array', 'goog.array.ArrayLike'], ['goog.asserts']);
 goog.addDependency("asserts/asserts.js", ['goog.asserts', 'goog.asserts.AssertionError'], ['goog.debug.Error', 'goog.string']);
 goog.addDependency("async/conditionaldelay.js", ['goog.async.ConditionalDelay'], ['goog.Disposable', 'goog.async.Delay']);
