@@ -1,4 +1,5 @@
 goog.require('goog.testing.jsunit');
+goog.require('goog.date.UtcDateTime');
 goog.require('blog.models.Post');
 goog.require('blog.models.Comment');
 
@@ -27,4 +28,24 @@ function test_can_add_comment(){
   b.addComment(c);
 
   assertContains(c, b.getComments());
+}
+
+function test_date_posted_set_when_adding(){
+  var b = new blog.models.Post();
+  var comment = new blog.models.Comment("asdf");
+
+  var dt = new goog.date.UtcDateTime();
+  b.addComment(comment);
+
+  assert(dt <= comment.date_posted);
+}
+
+function test_isPosted_returns_true_after_adding_comment(){
+  var b = new blog.models.Post();
+  var comment = new blog.models.Comment("asdf");
+
+  var dt = new goog.date.UtcDateTime();
+  b.addComment(comment);
+
+  assertTrue(comment.isPosted());
 }

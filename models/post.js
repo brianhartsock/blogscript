@@ -26,6 +26,8 @@ blog.models.Post.prototype.getHeader = function(){
 }
 
 blog.models.Post.prototype.addComment = function(c){
+  c.date_posted = new goog.date.UtcDateTime();
+
   this.comments.push(c);
 }
 
