@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="../vendor/closure-library/closure/goog/base.js"></script>
+    <script src="../models/blog.js"></script>
+    <script>
+      goog.require('blog.models.Blog');
+    </script>
+   
+  </head>
+  <body>
+    <script>
+      goog.require('goog.testing.jsunit');
+
+
+      function test_can_set_body(){
+        var b = new blog.models.Blog();
+
+        b.setBody("test");
+
+        assertEquals("Body not saved", "test", b.getBody());
+      }
+
+      function test_can_set_title(){
+        var b = new blog.models.Blog();
+
+        b.setHeader('test');
+
+        assertEquals('header saved', 'test', b.getHeader());
+      }
+
+      function test_can_add_comment(){
+        var b = new blog.models.Blog();
+        var c = new blog.models.Comment("asdf");
+
+        b.addComment(c);
+
+        assertContains(c, b.getComments());
+      }
+    </script>
+  </body>
+</html>
+
