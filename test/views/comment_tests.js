@@ -10,3 +10,7 @@ function test_can_load_comment(){
 
   assertContains("help", html);
 }
+
+function test_can_load_add_comment(){
+  var html = blog.views.Comment.add();
+}

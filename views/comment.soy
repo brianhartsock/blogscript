@@ -5,3 +5,23 @@
 {template .details}
 <div>{$comment.content}</div>
 {/template}
+
+/**
+ */
+{template .add}
+<form>
+  <p>
+    <input type="text" name="name" placeholder="Name" required/>
+  </p>
+  <p>
+    <input type="email" name="email" placeholder="Email Address" required/>
+  </p>
+  <p>
+    <input type="url" name="webpage" placeholder="Webpage (optional)"/>
+  </p>
+  <p>
+    <input type="textarea" name="content" required/>
+  </p>
+  <input type="submit" value="Add Comment" />
+</form>
+{/template}

@@ -4,8 +4,15 @@ require 'rake/clean'
 task :default => [:build]
 
 CLEAN.include('tmp/views/*', 'tmp/test/*')
+CLEAN.include('tmp/compiled.js')
 
-task :build => [:build_deps_for_tests, :compile_templates]
+task :build => [:build_deps_for_tests, :compile_templates, :compile]
+
+task :compile => [:compile_templates] do
+  compiled_file = 'tmp/compiled.js'
+  system("python #{CALC_DEPS_PATH} --path models --path tmp/views --path vendor/closure-library --path vendor/closure-templates-for-javascript-latest --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar  > #{compiled_file}")
+
+end
 
 task :build_deps_for_tests => [:compile_templates] do
 
@@ -43,7 +50,7 @@ end
 
 OUTPUT_MODE_LIST = 'list'
 OUTPUT_MODE_DEPS = 'deps'
-OUTPUT_MODE_COMPILE = 'compiled'
+OUTPUT_MODE_COMPILED = 'compiled'
 OUTPUT_MODE_SCRIPT = 'script'
 
 CALC_DEPS_PATH = "vendor/closure-library/closure/bin/calcdeps.py"

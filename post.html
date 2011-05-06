@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <script src="tmp/compiled.js"></script>
+  </head>
+  <body>
+
+    <div id="add_comment" />
+    <script>
+        var form = goog.dom.htmlToDocumentFragment(blog.views.Comment.add());
+        var add_comment_div = goog.dom.getElement('add_comment');
+
+        add_comment_div.appendChild(form);
+
+      </script>
+  </body>
+</html>
