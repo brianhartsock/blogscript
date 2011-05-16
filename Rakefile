@@ -10,7 +10,7 @@ task :build => [:build_deps_for_tests, :compile_templates, :compile]
 
 task :compile => [:compile_templates] do
   compiled_file = 'tmp/compiled.js'
-  system("python #{CALC_DEPS_PATH} --path models --path tmp/views --path vendor/closure-library --path vendor/closure-templates-for-javascript-latest --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar  > #{compiled_file}")
+  system("python #{CALC_DEPS_PATH} --path models --path tmp/views --path vendor/closure-library --path vendor/closure-templates-for-javascript-latest --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar -f --compilation_level=ADVANCED_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
 
 end
 

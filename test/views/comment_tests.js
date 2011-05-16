@@ -4,7 +4,7 @@ goog.require('blog.views.Comment');
 
 
 function test_can_load_comment(){
-  var c = new blog.models.Comment("help");
+  var c = new blog.models.Comment("name", "email", "webpage", "help");
 
   var html = blog.views.Comment.details({comment: c});
 
