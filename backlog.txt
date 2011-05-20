@@ -1,0 +1,2 @@
+* Figure out how to do document.onload
+* Comments list widget that listens to comment added event

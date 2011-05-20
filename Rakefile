@@ -1,24 +1,35 @@
 
 require 'rake/clean'
 
+TMP_VIEWS_FOLDER = 'tmp/views'
+TMP_TEST_FOLDER = 'tmp/test'
+PATHS = ['models', 'tmp/views', 'vendor/closure-library', 'vendor/closure-templates-for-javascript-latest']
+PATHS_STR = (PATHS.collect do |path|
+  "--path #{path} "
+end).join
+
+
 task :default => [:build]
 
-CLEAN.include('tmp/views/*', 'tmp/test/*')
-CLEAN.include('tmp/compiled.js')
+CLEAN.include('tmp/**/*')
 
 task :build => [:build_deps_for_tests, :compile_templates, :compile]
 
 task :compile => [:compile_templates] do
   compiled_file = 'tmp/compiled.js'
-  system("python #{CALC_DEPS_PATH} --path models --path tmp/views --path vendor/closure-library --path vendor/closure-templates-for-javascript-latest --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar -f --compilation_level=ADVANCED_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
+  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar -f --compilation_level=ADVANCED_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
 
 end
 
-task :build_deps_for_tests => [:compile_templates] do
+task :debug => [:compile_templates] do
+  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > tmp/post-deps.js")
+end
+
+task :build_deps_for_tests => [:compile_templates, :ensure_tmp_test_exists] do
 
   Dir.glob("test/**/*.js") do |file|
     if file !~ /-deps.js$/
-      deps_file = 'tmp/test/' + file.sub(/^test\//,'').gsub(/\//, '__').sub(/.js$/, '-deps.js')
+      deps_file = TMP_TEST_FOLDER + "/" + file.sub(/^test\//,'').gsub(/\//, '__').sub(/.js$/, '-deps.js')
 
       puts "Compiling deps for test #{file} => #{deps_file}"
       system("python #{CALC_DEPS_PATH} --path models --path tmp/views --path vendor/closure-library --path vendor/closure-templates-for-javascript-latest --input #{file} --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > #{deps_file}")
@@ -33,7 +44,19 @@ task :test => [:build_deps_for_tests, :compile_templates] do
   end
 end
 
-task :compile_templates do
+task :ensure_tmp_test_exists do
+  unless Dir.exists?(TMP_TEST_FOLDER)
+    FileUtils.mkdir(TMP_TEST_FOLDER)
+  end
+end
+
+task :ensure_tmp_views_exists do
+  unless Dir.exists?(TMP_VIEWS_FOLDER)
+    FileUtils.mkdir(TMP_VIEWS_FOLDER)
+  end
+end
+
+task :compile_templates  => [:ensure_tmp_views_exists] do
 
   soy_jar = 'vendor/closure-templates-for-javascript-latest/SoyToJsSrcCompiler.jar'
 

@@ -32,7 +32,7 @@ blog.models.Post.prototype.getHeader = function(){
 }
 
 /**
- * @param {number} c Comment to add to the blog post
+ * @param {blog.models.Comment} c Comment to add to the blog post
  */
 blog.models.Post.prototype.addComment = function(c){
   c.date_posted = new goog.date.UtcDateTime();
@@ -40,6 +40,9 @@ blog.models.Post.prototype.addComment = function(c){
   this.comments.push(c);
 }
 
+/**
+ * @return {Array} Array of comments
+ */
 blog.models.Post.prototype.getComments = function(){
   return this.comments;
 }
