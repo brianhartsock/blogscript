@@ -1,5 +1,16 @@
 {namespace blog.views.Comment}
 /**
+ * @param comments
+ */
+{template .comment_list}
+  {foreach $comment in $comments}
+    {call blog.views.Comment.details}
+      {param comment: $comment /}
+    {/call}
+  {/foreach}
+{/template}
+
+/**
  * @param comment
  */
 {template .details}

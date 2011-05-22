@@ -3,7 +3,7 @@ require 'rake/clean'
 
 TMP_VIEWS_FOLDER = 'tmp/views'
 TMP_TEST_FOLDER = 'tmp/test'
-PATHS = ['models', 'tmp/views', 'vendor/closure-library', 'vendor/closure-templates-for-javascript-latest']
+PATHS = ['controllers', 'models', 'tmp/views', 'vendor/closure-library', 'vendor/closure-templates-for-javascript-latest']
 PATHS_STR = (PATHS.collect do |path|
   "--path #{path} "
 end).join
@@ -17,7 +17,7 @@ task :build => [:build_deps_for_tests, :compile_templates, :compile]
 
 task :compile => [:compile_templates] do
   compiled_file = 'tmp/compiled.js'
-  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar -f --compilation_level=ADVANCED_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
+  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar -f --compilation_level=SIMPLE_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
 
 end
 
@@ -32,7 +32,7 @@ task :build_deps_for_tests => [:compile_templates, :ensure_tmp_test_exists] do
       deps_file = TMP_TEST_FOLDER + "/" + file.sub(/^test\//,'').gsub(/\//, '__').sub(/.js$/, '-deps.js')
 
       puts "Compiling deps for test #{file} => #{deps_file}"
-      system("python #{CALC_DEPS_PATH} --path models --path tmp/views --path vendor/closure-library --path vendor/closure-templates-for-javascript-latest --input #{file} --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > #{deps_file}")
+      system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input #{file} --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > #{deps_file}")
 
     end
   end

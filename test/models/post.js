@@ -1,51 +1,58 @@
 goog.require('goog.testing.jsunit');
 goog.require('goog.date.UtcDateTime');
 goog.require('blog.models.Post');
+goog.require('blog.models.Post.EventType');
 goog.require('blog.models.Comment');
+
+var post, comment;
+
+function setUp(){
+  post = new blog.models.Post();
+  comment = new blog.models.Comment("asdf");
+}
 
 
 function test_can_set_body(){
+  post.setBody("test");
 
-  var b = new blog.models.Post();
-
-  b.setBody("test");
-
-  assertEquals("Body not saved", "test", b.getBody());
+  assertEquals("Body not saved", "test", post.getBody());
 }
 
 function test_can_set_title(){
   var b = new blog.models.Post();
 
-  b.setHeader('test');
+  post.setHeader('test');
 
-  assertEquals('header saved', 'test', b.getHeader());
+  assertEquals('header saved', 'test', post.getHeader());
 }
 
 function test_can_add_comment(){
-  var b = new blog.models.Post();
-  var c = new blog.models.Comment("asdf");
+  post.addComment(comment);
 
-  b.addComment(c);
-
-  assertContains(c, b.getComments());
+  assertContains(comment, post.getComments());
 }
 
 function test_date_posted_set_when_adding(){
-  var b = new blog.models.Post();
-  var comment = new blog.models.Comment("asdf");
-
   var dt = new goog.date.UtcDateTime();
-  b.addComment(comment);
+  post.addComment(comment);
 
   assert(dt <= comment.date_posted);
 }
 
 function test_isPosted_returns_true_after_adding_comment(){
-  var b = new blog.models.Post();
-  var comment = new blog.models.Comment("asdf");
-
   var dt = new goog.date.UtcDateTime();
-  b.addComment(comment);
+  post.addComment(comment);
 
   assertTrue(comment.isPosted());
+}
+
+function test_addComment_triggers_comment_added_event(){
+  var listenerWasCalled = false;
+
+  post.addEventListener(blog.models.Post.EventType.COMMENT_ADDED, function(e){
+    listenerWasCalled = true;
+  });
+  post.addComment(comment);
+
+  assert(listenerWasCalled);
 }

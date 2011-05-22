@@ -21,4 +21,5 @@ document.onload = function(){
   var post_fragment = goog.dom.htmlToDocumentFragment(blog.views.Post.details({post: blog_post}));
 
   post_div.appendChild(post_fragment);
+
 };
