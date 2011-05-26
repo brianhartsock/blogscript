@@ -6,15 +6,5 @@
 <div>
   <h1>{$post.header}</div>
   <p>{$post.body}</p>
-  <div>
-    {foreach $comment in $post.comments}
-      {call blog.views.Comment.details}
-        {param comment}
-          {$comment}
-        {/param}
-      {/call}
-    {/foreach}
-  </div>
-  {call blog.views.Comment.add/}
 </div>
 {/template}

@@ -1,9 +1,10 @@
 goog.require('goog.testing.jsunit');
 goog.require('blog.models.Post');
+goog.require('blog.models.Comment');
 goog.require('blog.views.Post');
 
 
-function test_can_render_details_view()
+function test_can_render_details_view(){
   var p = new blog.models.Post();
   p.setBody("body");
   p.setHeader("header");

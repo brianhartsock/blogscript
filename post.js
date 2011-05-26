@@ -1,10 +1,9 @@
 goog.require('blog.models.Post')
 goog.require('blog.models.Comment')
-goog.require('blog.views.Comment')
-goog.require('blog.views.Post')
+goog.require('blog.controllers.AddComment');
+goog.require('blog.controllers.CommentList');
 
-
-document.onload = function(){
+window.onload = function(){
   //Setup data
   var blog_post = new blog.models.Post();
   blog_post.setHeader("Test");
@@ -17,9 +16,10 @@ document.onload = function(){
   blog_post.addComment(comment2);
 
   //Write out blog post
-  var post_div = goog.dom.getElement('post');
-  var post_fragment = goog.dom.htmlToDocumentFragment(blog.views.Post.details({post: blog_post}));
+  var comment_list = new blog.controllers.CommentList(blog_post);
+  var add_comment = new blog.controllers.AddComment(blog_post);
 
-  post_div.appendChild(post_fragment);
+  comment_list.render(goog.dom.getElement('comment_list'));
+  add_comment.render(goog.dom.getElement('add_comment'));
 
-};
+}

@@ -9,6 +9,7 @@ goog.require('blog.views.Comment');
 /**
  * @param {blog.models.Post} post Post to render coment list for
  * @constructor
+ * @extends {goog.ui.Component}
  */
 blog.controllers.CommentList = function(post){
   goog.base(this);
@@ -32,7 +33,7 @@ blog.controllers.CommentList.prototype.createDom = function(){
 }
 
 /**
- * @param {blog.models.Post.CommentAdded} e CommentAdded event.
+ * @param {blog.models.CommentAdded} e CommentAdded event.
  * @private
  */
 blog.controllers.CommentList.prototype.onCommentAdded_ = function(e){
@@ -45,5 +46,5 @@ blog.controllers.CommentList.prototype.enterDocument = function(){
   goog.base(this, 'enterDocument');
 
   var handler = this.getHandler();
-  handler.listen(post, blog.models.Post.EventType.COMMENT_ADDED, this.onCommentAdded_);
+  handler.listen(this.post_, blog.models.Post.EventType.COMMENT_ADDED, this.onCommentAdded_);
 }
