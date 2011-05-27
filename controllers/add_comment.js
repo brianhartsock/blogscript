@@ -5,6 +5,9 @@ goog.require('blog.models.Post');
 goog.require('blog.models.Comment');
 goog.require('blog.views.Comment');
 
+//HACK - Prevents a closure compiler warning.  Probably not great to force include but some sub library is.
+goog.require('goog.debug.ErrorHandler');
+
 /**
  * @param {blog.models.Post} post Post to render coment list for
  * @constructor
@@ -25,8 +28,8 @@ goog.inherits(blog.controllers.AddComment, goog.ui.Component);
  * @override
  */
 blog.controllers.AddComment.prototype.createDom = function(){
-  var html = blog.views.Comment.add();
-  this.element_ = goog.dom.htmlToDocumentFragment(html);
+  var html = /** @type {!string} */blog.views.Comment.add();
+  this.element_ = /** @type {!Element} */goog.dom.htmlToDocumentFragment(html);
 }
 
 /**
@@ -50,6 +53,9 @@ blog.controllers.AddComment.prototype.clearForm_ = function(){
   }
 }
 
+/**
+ * @notypecheck
+ */
 blog.controllers.AddComment.prototype.submit = function(){
   var form = this.getElement();
   var comment = new blog.models.Comment(

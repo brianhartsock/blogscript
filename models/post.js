@@ -44,20 +44,29 @@ blog.models.Post.EventType = {
 }
 
 /**
- * @param {string} content The content
+ * @param {string} content The content to set.
  */
 blog.models.Post.prototype.setBody = function(content){
   this.body_ = content;
 }
 
+/**
+ * @return {string} Body of the post
+ */
 blog.models.Post.prototype.getBody = function(){
   return this.body_;
 }
 
+/**
+ * @param {string} content Header of the post
+ */
 blog.models.Post.prototype.setHeader = function(content){
   this.header_ = content;
 }
 
+/**
+ * @return {string} Header of the post.
+ */
 blog.models.Post.prototype.getHeader = function(){
   return this.header_;
 }

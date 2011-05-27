@@ -4,13 +4,36 @@ goog.provide('blog.models.Comment');
 goog.require('goog.date.UtcDateTime');
 
 /**
+ * @param {string} name
+ * @param {string} email
+ * @param {string} webpage
+ * @param {string} content
  * @constructor
  */
-blog.models.Comment = function(_name, _email, _webpage, _content){
-  this.name = _name || "";
-  this.email = _email || "";
-  this.webpage = _webpage || "";
-  this.content = _content;
+blog.models.Comment = function(name, email, webpage, content){
+  /**
+   * @type {string}
+   * @private
+   */
+  this.name = name || "";
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.email = email || "";
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.webpage = webpage || "";
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.content = content || "";
   this.date_posted = null;
 }
 
@@ -49,6 +72,7 @@ blog.models.Comment.prototype.post = function(dt){
 }
 
 /**
+ * @return {boolean} Whether or not the comment has been posted
  */
 blog.models.Comment.prototype.isPosted = function(){
   return this.date_posted != null;

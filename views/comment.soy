@@ -14,7 +14,14 @@
  * @param comment
  */
 {template .details}
-<div>{$comment.content}</div>
+<div>
+  <div>
+    {if $comment.webpage}
+      <a href="{$comment.webpage}" target="_blank">{$comment.name}</a>
+    {else}
+      {$comment.name}
+    {/if}
+    {$comment.content}</div>
 {/template}
 
 /**
