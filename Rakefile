@@ -2,10 +2,19 @@
 require 'rake/clean'
 require 'erb'
 
+OUTPUT_MODE_LIST = 'list'
+OUTPUT_MODE_DEPS = 'deps'
+OUTPUT_MODE_COMPILED = 'compiled'
+OUTPUT_MODE_SCRIPT = 'script'
+CLOSURE_LIBRARY_PATH = 'vendor/closure-library'
+CLOSURE_TEMPLATES_PATH = 'vendor/closure-templates-for-javascript-latest'
+CLOSURE_COMPILAR_PATH = 'vendor/compiler-latest'
+CALC_DEPS_PATH = CLOSURE_LIBRARY_PATH + '/closure/bin/calcdeps.py'
+SOY_JAR = CLOSURE_TEMPLATES_PATH + '/SoyToJsSrcCompiler.jar'
+
 DEPS_FILE = 'tmp/deps.js'
-SOY_JAR = 'vendor/closure-templates-for-javascript-latest/SoyToJsSrcCompiler.jar'
 TMP_VIEWS_FOLDER = 'tmp/views'
-PATHS = ['controllers', 'models', 'tmp/views', 'vendor/closure-library', 'vendor/closure-templates-for-javascript-latest', 'lib']
+PATHS = ['controllers', 'models', 'tmp/views', CLOSURE_LIBRARY_PATH, CLOSURE_TEMPLATES_PATH, 'lib']
 PATHS_STR = (PATHS.collect do |path|
   "--path #{path} "
 end).join
@@ -18,13 +27,13 @@ task :build => [:build_deps, :compile_templates, :compile]
 
 task :compile => [:compile_templates] do
   compiled_file = 'tmp/compiled.js'
-  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar vendor/compiler-latest/compiler.jar -f --compilation_level=SIMPLE_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
+  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_COMPILED} --compiler_jar #{CLOSURE_COMPILER_PATH}/compiler.jar -f --compilation_level=SIMPLE_OPTIMIZATIONS -f --warning_level=VERBOSE > #{compiled_file}")
 
 end
 
 task :build_deps => [:compile_templates] do
   puts "Compiling deps => #{DEPS_FILE}"
-  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > #{DEPS_FILE}")
+  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --output_mode #{OUTPUT_MODE_DEPS} --dep #{CLOSURE_LIBRARY_PATH}/closure/goog/deps.js > #{DEPS_FILE}")
 end
 
 task :test => [:build_deps, :compile_templates] do
@@ -44,8 +53,10 @@ task :compile_templates  => [:ensure_tmp_views_exists] do
     js_file = 'tmp/views/' + file.sub(/^views\//, '').gsub(/\//, '__').sub(/soy$/, 'js')
     
     if !File.exists?(js_file) or File.mtime(soy_file) > File.mtime(js_file)
-      puts "Compiling #{js_file}"
+      puts "Compiling #{soy_file}"
       system("java -jar #{SOY_JAR} --outputPathFormat #{js_file} #{soy_file} --shouldProvideRequireSoyNamespaces --shouldGenerateJsdoc")
+    else
+      puts "Skipping compiling #{soy_file}"
     end
   end
 end
@@ -71,11 +82,4 @@ task :gen_js, :class_name, :methods do |t, args|
   puts tmpl.run binding
 end
 
-OUTPUT_MODE_LIST = 'list'
-OUTPUT_MODE_DEPS = 'deps'
-OUTPUT_MODE_COMPILED = 'compiled'
-OUTPUT_MODE_SCRIPT = 'script'
 
-CALC_DEPS_PATH = "vendor/closure-library/closure/bin/calcdeps.py"
-
-CLOSURE_LIBRARY_PATH = "vendor/closure-library"
