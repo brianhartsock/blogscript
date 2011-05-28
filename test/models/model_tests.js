@@ -25,7 +25,7 @@ function test_non_empty_property_is_valid(){
   assertTrue(obj.validate());
 }
 
-function test_empty_property_is_invalid){
+function test_empty_property_is_invalid(){
   var obj = new TestModel();
   assertFalse(obj.validate());
 }
