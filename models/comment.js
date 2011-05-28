@@ -1,6 +1,8 @@
 
 goog.provide('blog.models.Comment');
 
+goog.require('blog.NotEmptySpecification');
+goog.require('blog.models.Model');
 goog.require('goog.date.UtcDateTime');
 
 /**
@@ -9,6 +11,7 @@ goog.require('goog.date.UtcDateTime');
  * @param {string} webpage
  * @param {string} content
  * @constructor
+ * @extends {blog.models.Model}
  */
 blog.models.Comment = function(name, email, webpage, content){
   /**
@@ -35,6 +38,12 @@ blog.models.Comment = function(name, email, webpage, content){
    */
   this.content = content || "";
   this.date_posted = null;
+}
+goog.inherits(blog.models.Comment, blog.models.Model);
+
+blog.models.Comment.prototype.validations_ = {
+  name: new blog.NotEmptySpecification(),
+  content: new blog.NotEmptySpecification()
 }
 
 /**

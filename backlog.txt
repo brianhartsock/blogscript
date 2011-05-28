@@ -1,3 +1,8 @@
-
-* Add comment widget that publishes comment added event
 * Passing complex objects to inner templtes?
+* List posts
+* Persist posts in local storage
+* Persist posts in remote storage
+* Test fixtures
+* Validation
+* generators for the code
+* fix tests/model/comment

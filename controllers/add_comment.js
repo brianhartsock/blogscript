@@ -37,8 +37,8 @@ blog.controllers.AddComment.prototype.createDom = function(){
  * @private
  */
 blog.controllers.AddComment.prototype.onSubmit_ = function(e){
-  e.preventDefault();
   this.submit();
+  e.preventDefault();
 }
 
 /**
@@ -64,8 +64,12 @@ blog.controllers.AddComment.prototype.submit = function(){
       form.webpage.value, 
       form.content.value);
 
-  this.post_.addComment(comment);
-  this.clearForm_();
+  if(comment.validate()){
+    this.post_.addComment(comment);
+    this.clearForm_();
+  }else{
+    alert("fix your shit");
+  }
 }
 
 /**

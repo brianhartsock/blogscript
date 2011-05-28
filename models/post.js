@@ -3,6 +3,7 @@ goog.provide('blog.models.Post');
 goog.provide('blog.models.Post.EventType');
 goog.provide('blog.models.CommentAdded');
 
+goog.require('blog.models.Model');
 goog.require('blog.models.Comment');
 goog.require('goog.events');
 goog.require('goog.events.Event');

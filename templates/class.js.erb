@@ -1,0 +1,19 @@
+
+goog.provide('<%= class_name %>');
+
+/**
+ * @constructor
+ */
+<%= class_name %> = function(){
+
+}
+
+<% methods.each do |m| %>
+/**
+ *
+ */
+<%= class_name %>.prototype.<%= m %> = function(){
+
+}
+
+<% end %>
