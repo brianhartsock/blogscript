@@ -13,5 +13,3 @@ function test_is_not_posted(){
   assertFalse(comment.isPosted());
 
 }
-
-
