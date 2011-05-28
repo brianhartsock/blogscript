@@ -8,7 +8,7 @@ OUTPUT_MODE_COMPILED = 'compiled'
 OUTPUT_MODE_SCRIPT = 'script'
 CLOSURE_LIBRARY_PATH = 'vendor/closure-library'
 CLOSURE_TEMPLATES_PATH = 'vendor/closure-templates-for-javascript-latest'
-CLOSURE_COMPILAR_PATH = 'vendor/compiler-latest'
+CLOSURE_COMPILER_PATH = 'vendor/compiler-latest'
 CALC_DEPS_PATH = CLOSURE_LIBRARY_PATH + '/closure/bin/calcdeps.py'
 SOY_JAR = CLOSURE_TEMPLATES_PATH + '/SoyToJsSrcCompiler.jar'
 
@@ -23,7 +23,7 @@ task :default => [:build]
 
 CLEAN.include('tmp/**/*')
 
-task :build => [:build_deps, :compile_templates, :compile]
+task :build => [:build_deps, :compile_templates, :compile, :build_all_tests_js]
 
 task :compile => [:compile_templates] do
   compiled_file = 'tmp/compiled.js'
@@ -34,6 +34,13 @@ end
 task :build_deps => [:compile_templates] do
   puts "Compiling deps => #{DEPS_FILE}"
   system("python #{CALC_DEPS_PATH} #{PATHS_STR} --output_mode #{OUTPUT_MODE_DEPS} --dep #{CLOSURE_LIBRARY_PATH}/closure/goog/deps.js > #{DEPS_FILE}")
+end
+
+task :build_all_tests_js do
+  paths = Dir.glob('test/**/*.html').collect { |file| "'#{file.gsub(/test\//,'')}'" }.join(',')
+
+  output = "var _allTests = [#{paths}];"
+  File.open('tmp/all_tests.js', 'w') {|f| f.write(output) }
 end
 
 task :test => [:build_deps, :compile_templates] do
