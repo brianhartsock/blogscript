@@ -2,23 +2,19 @@
 require 'rake/clean'
 require 'erb'
 
+DEPS_FILE = 'tmp/deps.js'
+SOY_JAR = 'vendor/closure-templates-for-javascript-latest/SoyToJsSrcCompiler.jar'
 TMP_VIEWS_FOLDER = 'tmp/views'
-TMP_TEST_FOLDER = 'tmp/test'
 PATHS = ['controllers', 'models', 'tmp/views', 'vendor/closure-library', 'vendor/closure-templates-for-javascript-latest', 'lib']
 PATHS_STR = (PATHS.collect do |path|
   "--path #{path} "
 end).join
 
-def deps_file_for(file_path)
-  TMP_TEST_FOLDER + "/" + file_path.sub(/^test\//,'').gsub(/\//, '__').sub(/.js$/, '-deps.js')
-end
-
-
 task :default => [:build]
 
 CLEAN.include('tmp/**/*')
 
-task :build => [:build_deps_for_tests, :compile_templates, :compile]
+task :build => [:build_deps, :compile_templates, :compile]
 
 task :compile => [:compile_templates] do
   compiled_file = 'tmp/compiled.js'
@@ -26,44 +22,22 @@ task :compile => [:compile_templates] do
 
 end
 
-task :debug => [:compile_templates] do
-  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input post.js --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > tmp/post-deps.js")
+task :build_deps => [:compile_templates] do
+  puts "Compiling deps => #{DEPS_FILE}"
+  system("python #{CALC_DEPS_PATH} #{PATHS_STR} --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > #{DEPS_FILE}")
 end
 
-task :build_deps_for_tests => [:compile_templates, :ensure_tmp_test_exists] do
-
-  Dir.glob("test/**/*.js") do |file|
-    if file !~ /-deps.js$/
-      deps_file = deps_file_for file
-
-      puts "Compiling deps for test #{file} => #{deps_file}"
-      system("python #{CALC_DEPS_PATH} #{PATHS_STR} --input #{file} --output_mode #{OUTPUT_MODE_DEPS} --dep vendor/closure-library/closure/goog/deps.js > #{deps_file}")
-
-    end
-  end
-end
-
-task :test => [:build_deps_for_tests, :compile_templates] do
+task :test => [:build_deps, :compile_templates] do
   Dir.glob("test/**/*.html") do |file|
     system("open #{file}")
   end
 end
 
-task :ensure_tmp_test_exists do
-  unless Dir.exists?(TMP_TEST_FOLDER)
-    FileUtils.mkdir(TMP_TEST_FOLDER)
-  end
-end
-
 task :ensure_tmp_views_exists do
-  unless Dir.exists?(TMP_VIEWS_FOLDER)
-    FileUtils.mkdir(TMP_VIEWS_FOLDER)
-  end
+  FileUtils.mkdir_p(TMP_VIEWS_FOLDER)
 end
 
 task :compile_templates  => [:ensure_tmp_views_exists] do
-
-  soy_jar = 'vendor/closure-templates-for-javascript-latest/SoyToJsSrcCompiler.jar'
 
   Dir.glob('views/**/*.soy') do |file|
     soy_file = file
@@ -71,7 +45,7 @@ task :compile_templates  => [:ensure_tmp_views_exists] do
     
     if !File.exists?(js_file) or File.mtime(soy_file) > File.mtime(js_file)
       puts "Compiling #{js_file}"
-      system("java -jar #{soy_jar} --outputPathFormat #{js_file} #{soy_file} --shouldProvideRequireSoyNamespaces --shouldGenerateJsdoc")
+      system("java -jar #{SOY_JAR} --outputPathFormat #{js_file} #{soy_file} --shouldProvideRequireSoyNamespaces --shouldGenerateJsdoc")
     end
   end
 end
@@ -83,12 +57,9 @@ task :generate, :file do |t, args|
     file = args[:for]
     test_html_file = "test/#{file.gsub(/\.js$/,'')}_tests.html"
     test_js_file = "#{file.gsub(/\.js$/,'')}_tests.js"
-    test_deps_file = deps_file_for test_js_file
 
     tmpl = ERB.new File.new("templates/test.html.erb").read
     puts tmpl.run binding
-
-  #test_file_path = "test/#{args[:path].gsub(/\.js$/, '')}_tests.js"
 end
 
 task :gen_js, :class_name, :methods do |t, args|
