@@ -37,7 +37,7 @@ task :build_deps => [:compile_templates] do
 end
 
 task :build_all_tests_js do
-  paths = Dir.glob('test/**/*.html').collect { |file| "'#{file.gsub(/test\//,'')}'" }.join(',')
+  paths = Dir.glob('test/**/*.html').reject {|file| file == "test/all_tests.html"}.collect {|file| "'#{file.gsub(/test\//,'')}'" }.join(',')
 
   output = "var _allTests = [#{paths}];"
   File.open('tmp/all_tests.js', 'w') {|f| f.write(output) }

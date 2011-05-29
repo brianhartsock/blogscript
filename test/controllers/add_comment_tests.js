@@ -5,7 +5,17 @@ goog.require('blog.models.Post');
 goog.require('blog.models.Comment');
 goog.require('goog.dom');
 
-var test_div, post, add_comment_controller;
+VALID_EMAIL = "test@email.com";
+VALID_NAME = "Test Name";
+VALID_WEBAPGE = "http://test.com";
+VALID_CONTENT = "Test Content";
+
+function withValidCommentIn(form){
+  form.name.value = VALID_NAME;
+  form.email.value = VALID_EMAIL;
+  form.webpage.value = VALID_WEBAPGE;
+  form.content.value = VALID_CONTENT;
+}
 
 function setUp(){
   test_div = goog.dom.getElement('test_div');
@@ -13,6 +23,9 @@ function setUp(){
 
   add_comment_controller = new blog.controllers.AddComment(post);
   add_comment_controller.render(test_div);
+
+  form = add_comment_controller.getElement();
+  withValidCommentIn(form);
 }
 
 function tearDown(){
@@ -20,52 +33,31 @@ function tearDown(){
 }
 
 function test_name_is_saved_to_comment(){
-  var form = add_comment_controller.getElement();
-
   //TODO - Figure out how to really submit
-  form.name.value = "test value";
   add_comment_controller.submit();
 
-  assertEquals("test value", post.getComments()[0].getName());
+  assertEquals(VALID_NAME, post.getComments()[0].getName());
 }
 
 function test_webpage_is_saved_to_comment(){
-  var form = add_comment_controller.getElement();
-
-  //TODO - Figure out how to really submit
-  form.webpage.value = "http://test.com";
   add_comment_controller.submit();
 
-  assertEquals("http://test.com", post.getComments()[0].getWebpage());
+  assertEquals(VALID_WEBAPGE, post.getComments()[0].getWebpage());
 }
 
 function test_email_is_saved_to_comment(){
-  var form = add_comment_controller.getElement();
-
-  //TODO - Figure out how to really submit
-  form.email.value = "test@value.com";
   add_comment_controller.submit();
 
-  assertEquals("test@value.com", post.getComments()[0].getEmail());
+  assertEquals(VALID_EMAIL, post.getComments()[0].getEmail());
 }
 
 function test_content_is_saved_to_comment(){
-  var form = add_comment_controller.getElement();
-
-  //TODO - Figure out how to really submit
-  form.content.value = "Test content"
   add_comment_controller.submit();
 
-  assertEquals("Test content", post.getComments()[0].getContent());
+  assertEquals(VALID_CONTENT, post.getComments()[0].getContent());
 }
 
 function test_adding_comment_clears_form(){
-  var form = add_comment_controller.getElement();
-  form.name.value = "name";
-  form.email.value = "name";
-  form.webpage.value = "name";
-  form.content.value = "name";
-
   add_comment_controller.submit();
 
   assertFormIsEmpty(form);
