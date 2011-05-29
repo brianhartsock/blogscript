@@ -7,15 +7,20 @@ goog.require('blog.models.Model');
 goog.require('blog.models.Comment');
 goog.require('goog.events');
 goog.require('goog.events.Event');
-goog.require('goog.events.EventHandler'); //To get rid of warnings
-goog.require('goog.events.EventTarget');
 
 /**
+ * @param {Object.<string,*>=} obj Object to load into 
  * @constructor
  * @extends {blog.models.Model}
  */
-blog.models.Post = function(){
+blog.models.Post = function(obj){
   goog.base(this);
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.id_ = "" + Math.floor(Math.random() * 100);
 
   /**
    * @type {Array.<blog.models.Comment>}
@@ -33,15 +38,27 @@ blog.models.Post = function(){
    * @type {string}
    * @private
    */
-  this.header_ = ''
+  this.header_ = '';
+
+  //This has to be last because it sets all the properties
+  goog.base(this, obj);
 }
 goog.inherits(blog.models.Post, blog.models.Model);
+
+blog.models.Model.hasMany(blog.models.Post, blog.models.Comment, 'comments_');
 
 /**
  * @enum {string}
  */
 blog.models.Post.EventType = {
   COMMENT_ADDED: goog.events.getUniqueId('comment_added')
+}
+
+/**
+ * @return {string}
+ */
+blog.models.Post.prototype.getId = function(){
+  return this.id_;
 }
 
 /**
