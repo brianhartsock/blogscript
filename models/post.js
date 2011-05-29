@@ -12,7 +12,7 @@ goog.require('goog.events.EventTarget');
 
 /**
  * @constructor
- * @extends {goog.events.EventTarget}
+ * @extends {blog.models.Model}
  */
 blog.models.Post = function(){
   goog.base(this);
@@ -35,7 +35,7 @@ blog.models.Post = function(){
    */
   this.header_ = ''
 }
-goog.inherits(blog.models.Post, goog.events.EventTarget);
+goog.inherits(blog.models.Post, blog.models.Model);
 
 /**
  * @enum {string}

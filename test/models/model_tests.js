@@ -12,6 +12,9 @@ function setUp(){
   TestModel.prototype.validations_ = {
     test_: new blog.NotEmptySpecification()
   }
+  TestModel.prototype.changeSomething = function(){
+    this.propertyChanged_();
+  }
   
   NoValidations = function(){
     this.test_ = "";
@@ -33,4 +36,16 @@ function test_empty_property_is_invalid(){
 function test_no_validations_is_valid(){
   var obj = new NoValidations();
   assertTrue(obj.validate());
+}
+
+function test_change_model_emits_event(){
+  var obj = new TestModel();
+  var has_been_called = false;
+
+  obj.addEventListener(blog.models.Model.EventType.MODEL_CHANGED, function(){
+        has_been_called = true;
+      });
+  obj.changeSomething();
+
+  assert(has_been_called);
 }
