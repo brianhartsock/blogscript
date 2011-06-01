@@ -12,18 +12,38 @@ goog.require('goog.events.EventTarget');
  * @constructor
  */
 blog.models.Model = function(obj){
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.id_ = '' + Math.floor(Math.random() * 100);
+
   if(obj){
     this.fromObj_(obj);
   }
 }
 goog.inherits(blog.models.Model, goog.events.EventTarget);
 
+
 /**
- * @type {Object}
- * @protected
+ * @type {Object.<string, blog.Specification>}
+ * @private
  */
 blog.models.Model.prototype.validations_ = {};
 
+/**
+ * @type {Object.<string, Function>}
+ * @private
+ */
+blog.models.Model.prototype.associations_ = {};
+
+/**
+ * @return {string}
+ */
+blog.models.Model.prototype.getId = function(){
+  return this.id_;
+}
 
 /**
  * @returns {boolean} True or false depending on validation
@@ -45,8 +65,6 @@ blog.models.Model.EventType = {
   MODEL_CHANGED: goog.events.getUniqueId('model_changed')
 }
 
-blog.models.Model.prototype.associations_ = {
-}
 
 /**
  * @param {Object} parentType Parent model to map children to

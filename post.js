@@ -21,5 +21,4 @@ window.onload = function(){
 
   comment_list.render(goog.dom.getElement('comment_list'));
   add_comment.render(goog.dom.getElement('add_comment'));
-
 }

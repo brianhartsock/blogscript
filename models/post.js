@@ -17,12 +17,6 @@ blog.models.Post = function(obj){
   goog.base(this);
 
   /**
-   * @type {string}
-   * @private
-   */
-  this.id_ = "" + Math.floor(Math.random() * 100);
-
-  /**
    * @type {Array.<blog.models.Comment>}
    * @private
    */
@@ -52,13 +46,6 @@ blog.models.Model.hasMany(blog.models.Post, blog.models.Comment, 'comments_');
  */
 blog.models.Post.EventType = {
   COMMENT_ADDED: goog.events.getUniqueId('comment_added')
-}
-
-/**
- * @return {string}
- */
-blog.models.Post.prototype.getId = function(){
-  return this.id_;
 }
 
 /**

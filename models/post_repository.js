@@ -10,14 +10,14 @@ goog.require('goog.storage.Storage');
  */
 blog.models.PostRepository = function(store){
   /**
-   * @type {goog.storage.Storage}
+   * @type {!goog.storage.Storage}
    * @private
    */
   this.store_ = store;
 }
 
 /**
- * @returns {Array.<blog.models.Post>}
+ * @returns {Array.<!blog.models.Post>}
  */
 blog.models.PostRepository.prototype.getPosts = function(){
   var posts_meta = this.getPosts_();
@@ -30,7 +30,7 @@ blog.models.PostRepository.prototype.getPosts = function(){
 }
 
 /**
- * @param {blog.models.Post}
+ * @param {!blog.models.Post}
  */
 blog.models.PostRepository.prototype.add = function(post){
   var posts_meta = this.getPosts_();
@@ -47,7 +47,7 @@ blog.models.PostRepository.prototype.add = function(post){
 }
 
 /**
- * @param {blog.models.Post}
+ * @param {!blog.models.Post}
  */
 blog.models.PostRepository.prototype.remove = function(post){
   var posts_meta = this.getPosts_();

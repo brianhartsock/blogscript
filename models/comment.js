@@ -41,6 +41,9 @@ blog.models.Comment = function(name, email, webpage, content){
 }
 goog.inherits(blog.models.Comment, blog.models.Model);
 
+/**
+ * @inheritDoc
+ */
 blog.models.Comment.prototype.validations_ = {
   name: new blog.NotEmptySpecification(),
   content: new blog.NotEmptySpecification()

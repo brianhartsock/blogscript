@@ -9,7 +9,7 @@ goog.require('blog.views.Comment');
 goog.require('goog.debug.ErrorHandler');
 
 /**
- * @param {blog.models.Post} post Post to render coment list for
+ * @param {!blog.models.Post} post Post to render coment list for
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -17,7 +17,7 @@ blog.controllers.AddComment = function(post){
   goog.base(this);
 
   /**
-   * @type {blog.models.Post} 
+   * @type {!blog.models.Post} 
    * @private
    */
   this.post_ = post;
@@ -33,7 +33,7 @@ blog.controllers.AddComment.prototype.createDom = function(){
 }
 
 /**
- * @param {goog.events.Event} e Event fired.
+ * @param {!goog.events.Event} e Event fired.
  * @private
  */
 blog.controllers.AddComment.prototype.onSubmit_ = function(e){

@@ -5,3 +5,5 @@
 * Test fixtures
 * Validation
 * generators for the code
+* Improve ID strategy
+* Make repository more generic

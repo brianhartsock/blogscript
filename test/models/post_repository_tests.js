@@ -10,7 +10,7 @@ function setUp(){
   repository = new blog.models.PostRepository(storage);
 }
 
-function test_can_retrieve_comment_after_adding(){
+function test_can_retrieve_blog_after_adding(){
   assertEquals(0, repository.getPosts().length);
 
   var post = new blog.models.Post();
